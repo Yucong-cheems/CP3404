@@ -1,26 +1,34 @@
+import itertools
 from collections import Counter
 
 
-def find_key_letter_for_group(group, reference_letter='e'):
-    frequency_analysis = Counter(group)
-    most_common_letter = frequency_analysis.most_common(1)[0][0]
-    shift = (ord(most_common_letter) - ord(reference_letter)) % 26
-    return chr(shift + ord('a'))
-
+def vigenere_decrypt(ciphertext, key):
+    decrypted_text = ""
+    for i, char in enumerate(ciphertext):
+        if char.islower():
+            shift = ord(key[i % len(key)]) - ord('a')
+            decrypted_char = chr((ord(char) - shift) % 26 + ord('a'))
+            decrypted_text += decrypted_char
+        else:
+            decrypted_text += char
+    return decrypted_text
 
 ciphertext = "iyselxmteqsjtfxfbteezsrfeheeiysgtveitcnxidrzomrvmsvapoidctfzaxavioqsmopcupcmfwdkjelaevbmjezswimwceevqjqmqszaqwiytehbemacusulmxhzhxlwptmsmztqswfpxpgrztfcezsmssjwadepfneytrgulrppirgzvqctfzaxudewomezzzbhlrpdkvfcracdwmtxmgpoqapurrhjzrexkitpwfwvgbxirtzguppeiiideydtnwuswtdihfchmirpmzgwhrbelwtdihfcoqnrgbxefivfpqjmrkhipoqntcoeeucjtjqxkhzljyhqevbeprfperftktigostxkrysdvfuijrvpxaxkgxthqjkwmtwmizcoelqsvgxlwqmksodmhtcmjyzqhkwhlxqsrbelrmapgfoxttvlqpvuteqfhmfwkvflrmapgjdsriysepwspmswlpgpszftrexxvudmzifhiphqhzuoavaevfutiedwqsjtfdxfbalurrzhzvuiyatlqacxguelqbrbzoiervbelrfhftusiptjkizwqhkfvnxggvkbdfmhvrpyjqxjhfwtqgdiulxudeospxttaoqlrqhvtbdxqctfzaxudeomrsdxkvnlrpiysbfwfgrzjlrxdbwbwkagzhixraivhilxmachipendmsnprfxfbfogdnghprvmeywddceivatlvqeiwwlxqzvmtjwftdgjytdxmoupoqntfzaxahpgupqeqfhielqteqsjtfxfbbyhfwvrfnvkekwpyoqnjospwqrisulrptzhipvfwvgbxiagkvfvralcseriaufbfzjfwvajdwguwwdtizikcepxqgdwopxttfhipvfwzgjdatngfjgeftbszdceivatlvqpcgpnexavrtjqytkfjnwkhksndhuuwwflrpwvzmxezxehszhgrvrusiodeqfaxaugicwmozvmdccbifgzdxqbjdvmpurbsznvkekctjwftdgbwwarrzmphmhpanpxdxtgzdxqbjitpxiduwgqidtehlpcedesjdtgqcwdhluavhipsfwvfjdoqekgfnvqitzflvxnzhjdvqflwsphfwrhdzqbjkworxttjsdcifzvmgcsyiysqffxxtcoplmhkccpmziiodeenavhiciqsvgjrreqrgfosziysozxudecgaynazqlpcenjhfxwitisqffxxjvfovukvgudlmbzfbyhmscsnlrewfkfolalkvfqeoiffjdefxfbqcsnavadzyxsssvdipifqpywfglqultgqcwdvikrimqesenjhfxxtxjwtelqlvzmvraleftlgdnghpdceivanpvwavooolqacabyyetuhipozpggbnobgfpmpquckvftvodegucyoizcoxgqazsdpfgxchbdceivaxsmowrdqwmqsvfszvodiffnxucxqpoiearhfcmztcubxexrzhfppspusttkztuoqffxxtyfjgdnghpdceivavdmzvkvfomerisuppavrfjelyeiccwiybzzmpvmcuypmpuiqgvrkqhksefwucxsmwmbizqdfvhtjhpoiexxbqffxxtyfjgdnghpdceivat"
-key_length = 6
 
+groups = [
+    ['e', 'p', 'i'],  # Group 1
+    ['r', 'c', 'v'],  # Group 2
+    ['d', 'o', 'h'],  # Group 3
+    ['b', 'm', 'f'],  # Group 4
+    ['l', 'w', 'p'],  # Group 5
+    ['t', 'e', 'x'],  # Group 6
+    ['m', 'x', 'q'],  # Group 7
+]
 
-groups = ['' for _ in range(key_length)]
-for i, letter in enumerate(ciphertext):
-    groups[i % key_length] += letter
+possible_keys = list(itertools.product(*groups))
 
-reference_letters = ['e', 't', 'a']
-keys = []
-for ref_letter in reference_letters:
-    key = ''.join(find_key_letter_for_group(group, ref_letter) for group in groups)
-    keys.append(key)
+for key_tuple in possible_keys:
+    key = ''.join(key_tuple)
+    decrypted_text = vigenere_decrypt(ciphertext, key)
+    print(f"Key: {key} -> {decrypted_text[:30]}...")
 
-for key in keys:
-    print(f"The key for reference letter {ref_letter} is likely:", key)
