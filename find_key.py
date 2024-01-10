@@ -45,6 +45,5 @@ for i, group in enumerate(groups, start=1):
 
     print(f"Group {i}: Most common letter is '{most_common_letter}', key letter is '{key_letter}'")
 
-# Combine the key letters to form the key
 key = ''.join(key_letters)
 print(f"The most likely key is: {key}")
