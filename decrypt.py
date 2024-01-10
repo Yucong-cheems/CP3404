@@ -19,7 +19,7 @@ def decrypt_vigenere(ciphertext, key):
 
     return plaintext
 
-key = "abavbm"
+key = "problem"
 
 plaintext = decrypt_vigenere(ciphertext, key)
 print(f"Decrypted plaintext is:\n{plaintext}")
